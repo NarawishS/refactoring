@@ -28,42 +28,6 @@ public class Grid {
     }
 
     /**
-     * Print view of board in console.
-     */
-    public void printGrid() {
-        StringBuilder line = new StringBuilder();
-        System.out.println("---");
-        for (int y = 0; y < height; y++) {
-            line.delete(0, line.length());
-            line.append("|");
-            for (int x = 0; x < width; x++) {
-                if (this.grid[x][y] == DEAD) {
-                    line.append("*");
-                } else {
-                    line.append(".");
-                }
-            }
-            line.append("|");
-            System.out.println(line.toString());
-        }
-        System.out.println("---\n");
-    }
-
-    /**
-     * Set cell to Alive
-     */
-    public void setAlive(int x, int y) {
-        setState(x, y, ALIVE);
-    }
-
-    /**
-     * Set cell to Dead
-     */
-    public void setDead(int x, int y) {
-        setState(x, y, DEAD);
-    }
-
-    /**
      * Set the cell.
      */
     public void setState(int x, int y, int state) {

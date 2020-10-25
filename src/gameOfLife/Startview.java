@@ -75,37 +75,4 @@ public class Startview extends VBox {
 
         this.getChildren().addAll(resolutionTile, cellSize, loopStatus, menu);
     }
-
-    /**
-     * Size enum of canvas
-     */
-    public enum Size {
-        Small_800x400(800, 400),
-        Medium_1000x600(1000, 600),
-        Large_1200x800(1200, 800),
-        FullScreen((int) (Mainview.SCREENX - (Mainview.SCREENX % 20)), (int) (Mainview.SCREENY - (Mainview.SCREENY % 20) - 20));
-
-        private final int width;
-        private final int height;
-
-        Size(int width, int height) {
-            this.width = width;
-            this.height = height;
-        }
-    }
-
-    /**
-     * resolution enum for cell size
-     */
-    public enum CellSize {
-        Small(5),
-        Medium(10),
-        Large(20);
-
-        private final int size;
-
-        CellSize(int size) {
-            this.size = size;
-        }
-    }
 }
