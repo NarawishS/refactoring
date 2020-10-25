@@ -1,69 +1,115 @@
-# Game of Life
-## The Game
-The Game of Life is a cellular automaton game invented by Cambridge mathematician John Conway.
+# Game of life
+From Narawish's game of life code: [repo](https://github.com/NarawishS/pa4-NarawishS)
 
-It consists of a collection of cells which, based on a few mathematical rules, can live, die or multiply. Depending on the initial conditions, the cells form various patterns throughout the course of the game.
-
-## The Rules
-For a space that is populated:
-* Each cell with one or no neighbor dies, as if by solitude.
-* Each cell with four or more neighbors dies, as if by overpopulation.
-* Each cell with two or three neighbors survives.
-
-For a space that is empty or unpopulated:
-* Each cell with three neighbors becomes populated.
-
-## The Controls
-When you open the application you will see a window like picture below.
-
-![startview](https://github.com/NarawishS/pa4-NarawishS/blob/master/src/image/configure.jpg?raw=true)
-
-1. choose the resolution
-2. choose cell size
-3. check loop if you want the game to loop around border
-
-the application should look like this after you click Play!
-
-![mainview](https://github.com/NarawishS/pa4-NarawishS/blob/master/src/image/main.jpg?raw=true)
-
-to draw you can press and drag on board to set cell status.
-
-after you make change to the board(load, draw, erase, random, clear) the day count will be reset.
-
+### remove redundant code
+This is code is use before in development process
+in Grid.java remove them.
 ```
-Button
-1. draw:    change mode of your mouse to set cell to alive
-2. erase:   change mode of your mouse to set cell to dead
-3. clear:   clear all cell on board
-4. random:  random all cell on board
-5. speed:   change speed of the game(fast-slow)
-6. start:   run the game
-7. stop:    pause the game
-8. step:    run the game one frame
+/**
+* Set cell to Alive
+*/
+public void setAlive(int x, int y) {
+    setState(x, y, ALIVE);
+}
+```
+```
+/**
+ * Set cell to Dead
+ */
+public void setDead(int x, int y) {
+    setState(x, y, DEAD);
+}
+```
+```
+/**
+ * Print view of board in console.
+ */
+public void printGrid() {
+    StringBuilder line = new StringBuilder();
+    System.out.println("---");
+    for (int y = 0; y < height; y++) {
+        line.delete(0, line.length());
+        line.append("|");
+        for (int x = 0; x < width; x++) {
+            if (this.grid[x][y] == DEAD) {
+                line.append("*");
+            } else {
+                line.append(".");
+            }
+        }
+        line.append("|");
+        System.out.println(line.toString());
+    }
+    System.out.println("---\n");
+}
+```
+### Separate file to match their use
+In `StartView.java` there are two enum separate them into `Size.java` and `CellSize.java`
+```
+/**
+ * Size enum of canvas
+ */
+public enum Size {
+    Small_800x400(800, 400),
+    Medium_1000x600(1000, 600),
+    Large_1200x800(1200, 800),
+    FullScreen((int) (Mainview.SCREEN_X - (Mainview.SCREEN_X % 20)), (int) (Mainview.SCREEN_Y - (Mainview.SCREEN_Y % 20) - 20));
+
+    final int width;
+    final int height;
+
+    Size(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+}
+```
+```
+/**
+ * resolution enum for cell size
+ */
+public enum CellSize {
+    Small(5),
+    Medium(10),
+    Large(20);
+
+    private final int size;
+
+    CellSize(int size) {
+        this.size = size;
+    }
+}
 ```
 
-you can save or load file in menu(save file does not save day count and can't load file from different size and resolution)
+### Change location of attribute
+In `Mainview.java` screen resolution should be in enum Size in `Size.java`
+```
+/**
+ * resolution of screen width
+ */
+static final double SCREEN_X = Screen.getPrimary().getVisualBounds().getMaxX();
+/**
+ * resolution of screen height
+ */
+static final double SCREEN_Y = Screen.getPrimary().getVisualBounds().getMaxY();
+```
 
-## How to run
-you can open with jar file.
+### In enum Size.java FULLSCREEN value
+extract width and height of FULLSCREEN to separate method.
+```
+FullScreen((int) (Mainview.SCREENX - (Mainview.SCREENX % 20)), (int) (Mainview.SCREENY - (Mainview.SCREENY % 20) - 20));
+```
+to
+```
+FullScreen(getComputeScreenX(), getComputeScreenY());
+...
+private static int getComputeScreenX() {
+    double screenX = Screen.getPrimary().getVisualBounds().getMaxX();
+    return (int) (screenX - (screenX % 20));
+}
 
-if you can't then
-1. run this program in your ide
-2. If you are using JDK 8-10 then JavaFX is included. You don't need to add any libraries.
-3. If you are using Java JDK 11, then install JavaFX 11 from https://gluonhq.com/products/javafx.
-4. set up your ide to run JavaFX.
-[see more](https://openjfx.io/openjfx-docs/)
-
-run in command > `java -jar Game_of_life-NarawishS.jar` if you are using JDK 8
-
-For Java 11 you need to specify the module path for JavaFX
-
-run in command > `java --module-path /path/to/javafx11/lib/ --add-modules javafx.controls -jar lib.Game_of_life-NarawishS.jar`
-
-## UML of application
-![appUML](https://github.com/NarawishS/pa4-NarawishS/blob/master/src/image/uml.png?raw=true)
-
-## External lib
-[JDK](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
-
-[JavaFX](https://openjfx.io/)
+private static int getComputeScreenY() {
+    double screenY = Screen.getPrimary().getVisualBounds().getMaxY();
+    return (int) (screenY - (screenY % 20) - 20);
+}
+```
