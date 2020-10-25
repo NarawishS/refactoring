@@ -1,9 +1,10 @@
-# Game of life
-From Narawish's game of life code: [repo](https://github.com/NarawishS/pa4-NarawishS)
+# Refactoring
+## Game of life
+From NarawishS's game of life code: [repo](https://github.com/NarawishS/pa4-NarawishS)
 
 ### remove redundant code
-This is code is use before in development process
-in Grid.java remove them.
+In the `src/gameOfLife/Grid.java` class
+consider these code:
 ```
 /**
 * Set cell to Alive
@@ -43,8 +44,14 @@ public void printGrid() {
     System.out.println("---\n");
 }
 ```
+* Refactoring Signs:
+    * these methods are never use.
+* Refactoring: 
+    * remove these redundant method.
+
 ### Separate file to match their use
-In `StartView.java` there are two enum separate them into `Size.java` and `CellSize.java`
+In the `src/gameOfLife/StartView.java` class
+consider these code:
 ```
 /**
  * Size enum of canvas
@@ -80,9 +87,15 @@ public enum CellSize {
     }
 }
 ```
+* Refactoring Signs:
+    * these enum should be in different class.
+* Refactoring:
+    * move these enum to new class `Size.java` and `CellSize.java`.
+    * make attribute public.
 
 ### Change location of attribute
-In `Mainview.java` screen resolution should be in enum Size in `Size.java`
+In the `src/gameOfLife/Mainview.java` class
+consider these code:
 ```
 /**
  * resolution of screen width
@@ -93,13 +106,23 @@ static final double SCREEN_X = Screen.getPrimary().getVisualBounds().getMaxX();
  */
 static final double SCREEN_Y = Screen.getPrimary().getVisualBounds().getMaxY();
 ```
+* Refactoring Signs:
+    * these code should be in `Size.java` enum.
+* Refactoring:
+    * move these code to enum Size
 
 ### In enum Size.java FULLSCREEN value
-extract width and height of FULLSCREEN to separate method.
+In the `src/gameOfLife/Size.java` class
+consider these code:
 ```
 FullScreen((int) (Mainview.SCREENX - (Mainview.SCREENX % 20)), (int) (Mainview.SCREENY - (Mainview.SCREENY % 20) - 20));
 ```
-to
+* Refactoring Signs:
+    * the width and height are too long and complicate.
+* Refactoring:
+    * create new method for computing.
+
+after
 ```
 FullScreen(getComputeScreenX(), getComputeScreenY());
 ...
